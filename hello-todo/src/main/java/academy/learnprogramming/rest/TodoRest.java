@@ -3,6 +3,7 @@ package academy.learnprogramming.rest;
 
 import academy.learnprogramming.entity.Todo;
 import academy.learnprogramming.service.TodoService;
+import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -42,7 +43,7 @@ public class TodoRest {
         return todoService.findTodoById(id);
     }
     
-    @Path("List")
+    @Path("list")
     @GET
     
     public List<Todo> getTodos(){
