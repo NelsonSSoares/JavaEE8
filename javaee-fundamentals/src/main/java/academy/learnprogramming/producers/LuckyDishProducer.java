@@ -4,9 +4,14 @@ import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 public class LuckyDishProducer {
-
+    
+    @Inject
+    EntityManager entityManager;
+    
     /**
      * Producer methods are very useful for when the concrete type to to be
      * injected varies at runtime. This provides polymorphic injection at
