@@ -22,7 +22,7 @@ public class LoggedInterceptor {
 
     //Could populate this from DB or security manager
     // with name of currently executing user
-    private String user = "Luqman";
+    private String user = "Nelson";
 
     //This method will be called and passed invocation context by container
     @AroundInvoke
@@ -32,13 +32,14 @@ public class LoggedInterceptor {
         return context.proceed();
     }
 
-//    @PostConstruct
-//    private void init(InvocationContext context) {
-//
-//    }
-//
-//    @PreDestroy
-//    private void kill(InvocationContext context) {
-//
-//    }
+/*    @PostConstruct
+    private void init(InvocationContext context) {
+
+    }
+
+    @PreDestroy
+    private void kill(InvocationContext context) {
+
+    }
+*/
 }

@@ -6,8 +6,8 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+//import javax.persistence.EntityManager;
+//import javax.persistence.PersistenceContext;
 
 public class LoggerProducer {
 
@@ -17,13 +17,13 @@ public class LoggerProducer {
         return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
     }
     
-    @Produces
-    @PersistenceContext
-    EntityManager entityManager;
+    //@Produces
+    //@PersistenceContext
+    //EntityManager entityManager;
     
-    @Produces
-    @academy.learnprogramming.annotations.Police
-    public Salute getSalutation(){
-        return new Police();
-    }
+    //@Produces
+    //@academy.learnprogramming.annotations.Police
+    //public Salute getSalutation(){
+    //    return new Police();
+    //}
 }
