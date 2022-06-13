@@ -17,9 +17,13 @@ public class EventBean {
 
     @Inject
     private EventData eventData;
+    
     @Inject
     private User user;
 
+    @Inject
+    Event<String> greetingEvent;
+    
     @Inject
     @PopularStand
     private Event<EventData> eventDataEvent;
@@ -31,7 +35,9 @@ public class EventBean {
     public void login() {
         //Do credentials checking to login in user then fire login event
         //someSecurityManager.loginUser(user.getEmail, user.getPassword)
-
+        
+        greetingEvent.fire("hello from priority");
+        
         LocalDateTime now = LocalDateTime.now();
         System.out.println(now);
 
