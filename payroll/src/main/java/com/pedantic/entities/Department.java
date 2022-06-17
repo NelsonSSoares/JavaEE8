@@ -19,18 +19,16 @@ public class Department extends AbstractEntity {
 
 
     @NotEmpty(message = "Department name must be set")
-    @Transient
+
     private String departmentName;
 
     @OneToMany(mappedBy = "department")
     private Collection<Employee> employees = new ArrayList<>();
-    
 
-    
     @Transient
     private String departmentCode;
 
-    @Access(AccessType.PROPERTY)
+
     public String getDepartmentCode() {
         return departmentCode;
     }
