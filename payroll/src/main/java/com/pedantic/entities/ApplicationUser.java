@@ -1,10 +1,26 @@
 package com.pedantic.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 @Entity
-public class ApplicationUser extends AbstractEntity{
-
+public class ApplicationUser{
+    
+    @SequenceGenerator(name = "User_seq", sequenceName = "User_sequence")
+    @GeneratedValue(generator = "User_seq")
+    @Id
+    private Long id;
+    
+    /*
+        CREATE SEQUENCE Emp_Seq
+        MINVALUE 1
+        START WITH 1
+        INCREMENT BY 50
+    */
+    
+    
     private String email;
 
 
