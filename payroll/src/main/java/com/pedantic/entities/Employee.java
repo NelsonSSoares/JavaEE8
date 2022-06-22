@@ -25,7 +25,7 @@ import javax.validation.constraints.PastOrPresent;
  * @author Nelson
  */
 @Entity
-/*
+
 @NamedQuery(name = Employee.FIND_BY_ID, query = "select e from Employee e where e.id = :id and e.userEmail = :email")
 @NamedQuery(name = Employee.FIND_BY_NAME, query = "select e from Employee e where e.fullName = :name and e.userEmail = :email")
 @NamedQuery(name = Employee.LIST_EMPLOYEES, query = "select  e from Employee e where e.userEmail = :email order by e.fullName")
@@ -33,13 +33,14 @@ import javax.validation.constraints.PastOrPresent;
         query = "select p from Employee e join e.pastPayslips p where e.id = :employeeId and e.userEmail =:email and p.id =:payslipId and p.userEmail = :email")
 @NamedQuery(name = Employee.GET_PAST_PAYSLIPS, query = "select p from Employee e inner join e.pastPayslips p where e.id = :employeeId and e.userEmail=:email")
 //@Table(name = "Employee", schema = "HR")
-*/
-public class Employee  {
+
+public class Employee  extends AbstractEntity{
+   /* 
     @TableGenerator(name = "Emp_Gen", table = "ID_GEN", pkColumnName = "GEN_NAME", valueColumnName = "GEN_VALUE")
     @GeneratedValue(generator = "Emp_Gen")
     @Id
     private Long id;
-    
+    */
     
     
     

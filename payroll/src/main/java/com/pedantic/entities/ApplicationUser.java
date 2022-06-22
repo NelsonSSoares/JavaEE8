@@ -6,13 +6,13 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class ApplicationUser{
-    
+public class ApplicationUser extends AbstractEntity{
+   /*
     @SequenceGenerator(name = "User_seq", sequenceName = "User_sequence")
     @GeneratedValue(generator = "User_seq")
     @Id
     private Long id;
-    
+    */
     /*
         CREATE SEQUENCE Emp_Seq
         MINVALUE 1
