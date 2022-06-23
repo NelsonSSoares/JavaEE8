@@ -11,7 +11,9 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.ejb.Local;
 import javax.json.bind.annotation.JsonbDateFormat;
@@ -103,6 +105,12 @@ public class Employee  extends AbstractEntity{
 
     @OneToMany
     private Collection<Payslip> pastPayslips = new ArrayList<>();
+    
+    @ElementCollection
+    @CollectionTable(name = "EMP_PHONE_NUMBER")
+    @Column(name = "PHONE_NUMBER")
+    @MapKeyEnumerated(EnumType.STRING)
+    private Map<PhoneType, String> employeePhoneNumbers = new HashMap<>();
 
 
     @ManyToOne
