@@ -80,7 +80,15 @@ public class Employee  extends AbstractEntity{
 
     @Embedded
     private Address address;
-
+    
+    @ElementCollection
+    @CollectionTable(name = "QUALIFICATIONS", joinColumns = @JoinColumn(name = "EMP_ID"))
+    private Collection<Qualifications> qualifications = new ArrayList<>();
+    
+    @ElementCollection
+    @Column(name = "NICKY")
+    private Collection<String> nickNames;
+    
     private int age;
 
     @OneToMany

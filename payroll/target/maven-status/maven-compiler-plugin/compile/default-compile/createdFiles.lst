@@ -5,8 +5,10 @@ com\pedantic\config\JAXRSConfiguration.class
 com\pedantic\config\Producers.class
 com\pedantic\entities\Payslip.class
 com\pedantic\service\PersistenceService.class
+com\pedantic\entities\Project.class
 com\pedantic\entities\Allowance.class
 com\pedantic\entities\ApplicationUser.class
 com\pedantic\entities\Tax.class
+com\pedantic\entities\ParkingSpace.class
 com\pedantic\entities\AbstractEntity.class
 com\pedantic\entities\Address.class
