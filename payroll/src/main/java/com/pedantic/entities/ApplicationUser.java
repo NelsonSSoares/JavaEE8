@@ -7,20 +7,17 @@ import javax.persistence.SequenceGenerator;
 
 @Entity
 public class ApplicationUser extends AbstractEntity{
-   /*
-    @SequenceGenerator(name = "User_seq", sequenceName = "User_sequence")
-    @GeneratedValue(generator = "User_seq")
-    @Id
-    private Long id;
-    */
-    /*
-        CREATE SEQUENCE Emp_Seq
-        MINVALUE 1
-        START WITH 1
-        INCREMENT BY 50
-    */
-    
-    
+
+//    @SequenceGenerator(name = "User_seq", sequenceName = "User_sequence")
+//    @GeneratedValue(generator = "User_seq")
+//    @Id
+//    private Long id;
+
+//    CREATE SEQUENCE Emp_Seq
+//    MINVALUE 1
+//    START WITH 1
+//    INCREMENT BY 50
+
     private String email;
 
 
@@ -28,6 +25,14 @@ public class ApplicationUser extends AbstractEntity{
 
     private String password;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;

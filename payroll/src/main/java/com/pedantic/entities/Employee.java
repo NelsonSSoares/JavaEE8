@@ -6,28 +6,24 @@
 package com.pedantic.entities;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import javax.ejb.Local;
 import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.*;
+import javax.print.DocFlavor;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.PastOrPresent;
 
 /**
- * @author Nelson
+ * @author Seeraj
  */
 @Entity
-
 @NamedQuery(name = Employee.FIND_BY_ID, query = "select e from Employee e where e.id = :id and e.userEmail = :email")
 @NamedQuery(name = Employee.FIND_BY_NAME, query = "select e from Employee e where e.fullName = :name and e.userEmail = :email")
 @NamedQuery(name = Employee.LIST_EMPLOYEES, query = "select  e from Employee e where e.userEmail = :email order by e.fullName")
@@ -35,18 +31,22 @@ import javax.validation.constraints.PastOrPresent;
         query = "select p from Employee e join e.pastPayslips p where e.id = :employeeId and e.userEmail =:email and p.id =:payslipId and p.userEmail = :email")
 @NamedQuery(name = Employee.GET_PAST_PAYSLIPS, query = "select p from Employee e inner join e.pastPayslips p where e.id = :employeeId and e.userEmail=:email")
 //@Table(name = "Employee", schema = "HR")
+public class Employee extends AbstractEntity{
 
-public class Employee  extends AbstractEntity{
-   /* 
-    @TableGenerator(name = "Emp_Gen", table = "ID_GEN", pkColumnName = "GEN_NAME", valueColumnName = "GEN_VALUE")
-    @GeneratedValue(generator = "Emp_Gen")
-    @Id
-    private Long id;
-    */
-    
-    
-    
-    
+
+//    @TableGenerator(name = "Emp_Gen", table = "ID_GEN",
+//            pkColumnName = "GEN_NAME", valueColumnName = "GEN_VALUE")
+//    @GeneratedValue(generator = "Emp_Gen")
+//    @Id
+//    private Long id;
+
+
+
+
+
+
+
+
     public static final String FIND_BY_ID = "Employee.findById";
     public static final String FIND_BY_NAME = "Employee.findByName";
     public static final String LIST_EMPLOYEES = "Employee.listEmployees";
@@ -82,15 +82,15 @@ public class Employee  extends AbstractEntity{
 
     @Embedded
     private Address address;
-    
+
     @ElementCollection
     @CollectionTable(name = "QUALIFICATIONS", joinColumns = @JoinColumn(name = "EMP_ID"))
     private Collection<Qualifications> qualifications = new ArrayList<>();
-    
+
     @ElementCollection
     @Column(name = "NICKY")
-    private Collection<String> nickNames;
-    
+    private Collection<String> nickNames = new ArrayList<>();
+
     private int age;
 
     @OneToMany
@@ -99,28 +99,30 @@ public class Employee  extends AbstractEntity{
     @OneToOne
     @JoinColumn(name = "CURRENT_PAYSLIP_ID")
     private Payslip currentPayslip;
-    
+
     @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY)
     private ParkingSpace parkingSpace;
 
+
     @OneToMany
     private Collection<Payslip> pastPayslips = new ArrayList<>();
-    
+
+
     @ElementCollection
-    @CollectionTable(name = "EMP_PHONE_NUMBER")
+    @CollectionTable(name = "EMP_PHONE_NUMBERS")
+    @MapKeyColumn(name = "PHONE_TYPE")
     @Column(name = "PHONE_NUMBER")
     @MapKeyEnumerated(EnumType.STRING)
     private Map<PhoneType, String> employeePhoneNumbers = new HashMap<>();
 
-
     @ManyToOne
     @JoinColumn(name = "DEPT_ID")
     private Department department;
-    
+
     @ManyToMany(mappedBy = "employees")
-    private Collection<Project> projects;
-    
-    
+    private Collection<Project> projects = new ArrayList<>();
+
+
     @Lob
     @Basic(fetch = FetchType.LAZY)
     private byte[] picture;
@@ -129,6 +131,47 @@ public class Employee  extends AbstractEntity{
     @PrePersist
     private void init() {
         this.age = Period.between(dateOfBirth, LocalDate.now()).getYears();
+    }
+
+
+    public Map<PhoneType, String> getEmployeePhoneNumbers() {
+        return employeePhoneNumbers;
+    }
+
+    public void setEmployeePhoneNumbers(Map<PhoneType, String> employeePhoneNumbers) {
+        this.employeePhoneNumbers = employeePhoneNumbers;
+    }
+
+    public Collection<Qualifications> getQualifications() {
+        return qualifications;
+    }
+
+    public void setQualifications(Collection<Qualifications> qualifications) {
+        this.qualifications = qualifications;
+    }
+
+    public Collection<String> getNickNames() {
+        return nickNames;
+    }
+
+    public void setNickNames(Collection<String> nickNames) {
+        this.nickNames = nickNames;
+    }
+
+    public Collection<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Collection<Project> projects) {
+        this.projects = projects;
+    }
+
+    public ParkingSpace getParkingSpace() {
+        return parkingSpace;
+    }
+
+    public void setParkingSpace(ParkingSpace parkingSpace) {
+        this.parkingSpace = parkingSpace;
     }
 
     public Employee getReportsTo() {
