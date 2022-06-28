@@ -31,6 +31,14 @@ public class QueryService {
 
     }
     
+    public List<Department>  getAllDepartments(){
+       return entityManager.createNamedQuery(Department.GET_DEPARTMENT_LIST, Department.class).getResultList();
+    }
+    
+    
+    
+    
+    
     public Department findDepartmentById(Long id){
         
         return entityManager.find(Department.class, id);

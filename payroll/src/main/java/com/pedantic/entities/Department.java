@@ -6,17 +6,25 @@ import java.io.Serializable;
 import java.util.*;
 
 @Entity
+@NamedQuery(name = Department.GET_DEPARTMENT_LIST, query  = "select d from Department d")
+
+
+
+
 @NamedQuery(name = Department.FIND_BY_ID, query = "select d from Department d where d.id = :id and d.userEmail = :email")
 @NamedQuery(name = Department.FIND_BY_NAME, query = "select d from Department d where d.departmentName = :name and d.userEmail = :email")
 @NamedQuery(name = Department.LIST_DEPARTMENTS, query = "select d from Department d where  d.userEmail = :email")
 @Access(AccessType.FIELD)
+
 public class Department extends AbstractEntity {
 
     public static final String FIND_BY_ID = "Department.findById";
     public static final String FIND_BY_NAME = "Department.findByName";
     public static final String LIST_DEPARTMENTS = "Department.listDepartments";
+    public static final String GET_DEPARTMENT_LIST = "Department.getAllDepartment";
 
-
+    
+    
     @NotEmpty(message = "Department name must be set")
 
     private String departmentName;
