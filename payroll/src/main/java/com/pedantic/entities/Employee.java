@@ -3,18 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pedantic.entities;
+package academy.learnprogramming.entities;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
-import javax.ejb.Local;
 import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.*;
-import javax.print.DocFlavor;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -24,6 +20,20 @@ import javax.validation.constraints.PastOrPresent;
  * @author Seeraj
  */
 @Entity
+
+@NamedQuery(name = Employee.GET_EMPLOYEE_ALLOWANCES, query = "select al from Employee  e join e.employeeAllowances al where al.allowanceAmount > :greaterThanValue")
+
+@NamedQuery(name = Employee.EMPLOYEE_SALARY_BOUND, query = "select e from Employee e where e.basicSalary between :lowerBound and :upperBound")
+
+
+
+@NamedQuery(name = "", query = "select e.fullName, KEY(p), VALUE(p) from Employee e join e.employeePhoneNumbers p")
+
+@NamedQuery(name = "", query = "select e from Employee e join fetch e.employeeAllowances")
+
+@NamedQuery(name = Employee.GET_ALL_PARKING_SPACES, query = "select e.parkingSpace from Employee e")
+@NamedQuery(name = Employee.EMPLOYEE_PROJECTION, query = "select e.fullName, e.basicSalary from Employee e")
+@NamedQuery(name = Employee.EMPLOYEE_CONSTRUCTOR_PROJ, query = "select new academy.learnprogramming.entities.EmployeeDetails(e.fullName, e.basicSalary, e.department.departmentName) from Employee  e")
 @NamedQuery(name = Employee.FIND_BY_ID, query = "select e from Employee e where e.id = :id and e.userEmail = :email")
 @NamedQuery(name = Employee.FIND_BY_NAME, query = "select e from Employee e where e.fullName = :name and e.userEmail = :email")
 @NamedQuery(name = Employee.LIST_EMPLOYEES, query = "select  e from Employee e where e.userEmail = :email order by e.fullName")
@@ -40,19 +50,16 @@ public class Employee extends AbstractEntity{
 //    @Id
 //    private Long id;
 
-
-
-
-
-
-
-
+    public static final String EMPLOYEE_SALARY_BOUND = "EmployeeSalaryBound";
+    public static final String EMPLOYEE_PROJECTION = "Employee.nameAndSalaryProjection";
+    public static final String EMPLOYEE_CONSTRUCTOR_PROJ = "Employee.projection";
+    public static final String GET_EMPLOYEE_ALLOWANCES = "Employee.getAllowances";
     public static final String FIND_BY_ID = "Employee.findById";
     public static final String FIND_BY_NAME = "Employee.findByName";
     public static final String LIST_EMPLOYEES = "Employee.listEmployees";
     public static final String FIND_PAST_PAYSLIP_BY_ID = "Employee.findPastPayslipById";
     public static final String GET_PAST_PAYSLIPS = "Employee.getPastPayslips";
-
+    public static final String GET_ALL_PARKING_SPACES = "Employee.getAllParkingSpaces";
 
     @NotEmpty(message = "Name cannot be empty")
     @Basic
@@ -84,7 +91,7 @@ public class Employee extends AbstractEntity{
     private Address address;
 
     @ElementCollection
-    @CollectionTable(name = "QUALIFICATIONS", joinColumns = @JoinColumn(name = "EMP_ID"))
+    @CollectionTable(name = "QUALIFICATIONS", joinColumns = @JoinColumn(name = "EMP_ID") )
     private Collection<Qualifications> qualifications = new ArrayList<>();
 
     @ElementCollection
@@ -93,7 +100,7 @@ public class Employee extends AbstractEntity{
 
     private int age;
 
-    @OneToMany(cascade = {CascadeType.REMOVE})
+    @OneToMany( cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<Allowance> employeeAllowances = new HashSet<>();
 
     @OneToOne
