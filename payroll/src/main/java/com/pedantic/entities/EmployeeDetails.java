@@ -1,4 +1,4 @@
-package academy.learnprogramming.entities;
+package com.pedantic.entities;
 
 import java.math.BigDecimal;
 

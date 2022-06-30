@@ -1,7 +1,7 @@
-package academy.learnprogramming.service;
+package com.pedantic.service;
 
-
-import academy.learnprogramming.entities.*;
+import com.pedantic.entities.*;
+import com.pedantic.entities.Department;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -101,7 +101,18 @@ public class QueryService {
     }
 
 
-
+    public Collection<Employee> getEmployeeByBonus(){
+        return entityManager.createQuery("select e, e.basicSalary * 0.15 as bonus from Employee e order by bonus", Employee.class).getResultList();
+    }
+    
+    public Collection <Object[]> getTotalEmployeeSalariesByDepartment(){
+        TypedQuery<Object[]> query = entityManager.createQuery("select d.departmentName, sum(e.basicSalary) from Department d join d .employees e group by d.departmentName", Object[].class);
+        return query.getResultList();
+    }
+    
+    public Collection<Object[]> getAvarageEmployeeSalaryByDepartment(){
+        return entityManager.createQuery("select d.departmentName, avg(e.basicSalary) from Department d join d.employees e where e.subordinates is empty group by d.departmentName", Object[].class).getResultList();
+    }
 
 
 

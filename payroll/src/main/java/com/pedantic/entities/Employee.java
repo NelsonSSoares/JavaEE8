@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package academy.learnprogramming.entities;
+package com.pedantic.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
