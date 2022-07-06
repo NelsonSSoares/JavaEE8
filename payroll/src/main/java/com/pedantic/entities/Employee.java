@@ -5,16 +5,21 @@
  */
 package com.pedantic.entities;
 
+import com.pedantic.config.AbstractEntityListener;
+import com.pedantic.config.EmployeeListener;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 
 /**
  * @author Seeraj
@@ -41,6 +46,11 @@ import javax.validation.constraints.PastOrPresent;
         query = "select p from Employee e join e.pastPayslips p where e.id = :employeeId and e.userEmail =:email and p.id =:payslipId and p.userEmail = :email")
 @NamedQuery(name = Employee.GET_PAST_PAYSLIPS, query = "select p from Employee e inner join e.pastPayslips p where e.id = :employeeId and e.userEmail=:email")
 //@Table(name = "Employee", schema = "HR")
+
+
+
+@EntityListeners({EmployeeListener.class, AbstractEntityListener.class})
+
 public class Employee extends AbstractEntity{
 
 
@@ -63,13 +73,16 @@ public class Employee extends AbstractEntity{
 
     @NotEmpty(message = "Name cannot be empty")
     @Basic
+    @Size(max = 40, min = 3, message = "Full name must be less than 40 caracters")
     private String fullName;
 
     @Past(message = "Date of birth must be in the past")
+    @NotNull(message = "Date of Birth must be set")
     @JsonbDateFormat(value = "yyyy-MM-dd")
     private LocalDate dateOfBirth; //yyyy-MM-dd
 
     @NotNull(message = "Basic salary must be set")
+    @DecimalMin(value = "500", message = "Basic salary must be equal to or exced 500")
     private BigDecimal basicSalary;
 
     @NotNull(message = "Hired date must be set")
@@ -97,7 +110,8 @@ public class Employee extends AbstractEntity{
     @ElementCollection
     @Column(name = "NICKY")
     private Collection<String> nickNames = new ArrayList<>();
-
+    
+    @DecimalMax(value = "60", message ="Age must cannot exced 60")
     private int age;
 
     @OneToMany( cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -134,10 +148,19 @@ public class Employee extends AbstractEntity{
     @Basic(fetch = FetchType.LAZY)
     private byte[] picture;
 
+//    @PostRemove
+//    @PreRemove
+//    @PrePersist
+//    @PostPersist
+//    @PreUpdate
+//    @PostUpdate
+//    @PostLoad
+//    private void init() {
+//        this.age = Period.between(dateOfBirth, LocalDate.now()).getYears();
+//    }
 
-    @PrePersist
-    private void init() {
-        this.age = Period.between(dateOfBirth, LocalDate.now()).getYears();
+    public void setAge(int age) {
+        this.age = age;
     }
 
 

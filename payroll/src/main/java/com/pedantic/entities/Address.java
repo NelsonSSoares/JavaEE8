@@ -11,6 +11,8 @@ public class Address {
     private String country;
     private String phone;
     private String state;
+    @Email(message = "Email must be in the form user@domain.com")
+    private String email;
 
 
     public String getState() {

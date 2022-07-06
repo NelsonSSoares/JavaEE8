@@ -1,8 +1,10 @@
 package com.pedantic.entities;
 
+import com.pedantic.config.AbstractEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.*;
+import javax.validation.constraints.Pattern;
 
 //SELECT <select_expression>
 //        FROM <from_clause>
@@ -20,6 +22,9 @@ import java.util.*;
 @NamedQuery(name = Department.FIND_BY_NAME, query = "select d from Department d where d.departmentName = :name and d.userEmail = :email")
 @NamedQuery(name = Department.LIST_DEPARTMENTS, query = "select d from Department d where  d.userEmail = :email")
 @Access(AccessType.FIELD)
+
+
+@EntityListeners({AbstractEntityListener.class})
 public class Department extends AbstractEntity {
 
     public static final String FIND_BY_ID = "Department.findById";
@@ -33,6 +38,7 @@ public class Department extends AbstractEntity {
 
 
     @NotEmpty(message = "Department name must be set")
+    @Pattern(regexp = "", message = "Department name must be in form dept abreviation, number and branch ex: FIN0011MAIN")
     private String departmentName;
 
 //    @OneToMany(mappedBy = "department")
