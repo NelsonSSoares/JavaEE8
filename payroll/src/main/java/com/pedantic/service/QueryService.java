@@ -110,10 +110,21 @@ public class QueryService {
         return query.getResultList();
     }
     
+    public Collection<Object[]> getAverageEmployeeSalaryDept(){
+        return entityManager.createQuery("select d.departmentName, avg(e.basicSalary) from Department d join d.employees e where e.subordinates is empty group by d.departmentName", Object[].class).getResultList();
+    }
+    
+    public Collection<Object[]> countEmployeeByDept(){
+        return entityManager.createQuery("select d.departmentName, count(e) from Department d join d.employees e group by d.departmentName", Object[].class).getResultList();
+    }
+    
     public Collection<Object[]> getAvarageEmployeeSalaryByDepartment(){
         return entityManager.createQuery("select d.departmentName, avg(e.basicSalary) from Department d join d.employees e where e.subordinates is empty group by d.departmentName", Object[].class).getResultList();
     }
 
+    public Collection<Object[]> getEmployeesLowestByDept(){
+        return entityManager.createQuery("select d.departmentName, max(e.basicSalary) from Department d join d.employees e where e.subordinates is empty group by d.departmentName", Object[].class).getResultList();
+    }
 
 
 
