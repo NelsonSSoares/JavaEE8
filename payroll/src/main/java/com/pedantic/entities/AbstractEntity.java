@@ -1,4 +1,4 @@
-package academy.learnprogramming.entities;
+package com.pedantic.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;

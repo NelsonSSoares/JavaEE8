@@ -131,10 +131,16 @@ public class QueryService {
         return entityManager.createQuery("select d.departmentName, max(e.basicSalary) from Department d join d.employees e where e.subordinates is empty group by d.departmentName", Object[].class).getResultList();
     }
     
+    public Collection<Employee> findAllEmployeesNamedNative(){
+        return entityManager.createQuery("Employee.findAllNativeNamed", Employee.class ).getResultList();
+    }
+    
+    @SuppressWarnings("uncheked")
+    public Collection<Department> getDepartmentNativeQuery(){
+        return entityManager.createNativeQuery("select * from Department", Department.class).getResultList();
+    }
     
     
-
-
 
 
 

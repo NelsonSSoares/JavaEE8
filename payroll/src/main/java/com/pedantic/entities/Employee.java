@@ -25,17 +25,11 @@ import javax.validation.constraints.Size;
  * @author Seeraj
  */
 @Entity
-
+@NamedNativeQuery(name = "Employee.findNativeNamed", query = "select * from Employee", resultClass =  Employee.class)
 @NamedQuery(name = Employee.GET_EMPLOYEE_ALLOWANCES, query = "select al from Employee  e join e.employeeAllowances al where al.allowanceAmount > :greaterThanValue")
-
 @NamedQuery(name = Employee.EMPLOYEE_SALARY_BOUND, query = "select e from Employee e where e.basicSalary between :lowerBound and :upperBound")
-
-
-
 @NamedQuery(name = "", query = "select e.fullName, KEY(p), VALUE(p) from Employee e join e.employeePhoneNumbers p")
-
 @NamedQuery(name = "", query = "select e from Employee e join fetch e.employeeAllowances")
-
 @NamedQuery(name = Employee.GET_ALL_PARKING_SPACES, query = "select e.parkingSpace from Employee e")
 @NamedQuery(name = Employee.EMPLOYEE_PROJECTION, query = "select e.fullName, e.basicSalary from Employee e")
 @NamedQuery(name = Employee.EMPLOYEE_CONSTRUCTOR_PROJ, query = "select new academy.learnprogramming.entities.EmployeeDetails(e.fullName, e.basicSalary, e.department.departmentName) from Employee  e")
@@ -73,8 +67,11 @@ public class Employee extends AbstractEntity{
 
     @NotEmpty(message = "Name cannot be empty")
     @Basic
-    @Size(max = 40, min = 3, message = "Full name must be less than 40 caracters")
+    @Size(max = 40, min = 3, message = "Full name must be less than 40 caracters and must be greater than 3 ")
     private String fullName;
+    
+    @NotEmpty(message = "Social Security Number must be set")
+    private String socialSecurityNumber;
 
     @Past(message = "Date of birth must be in the past")
     @NotNull(message = "Date of Birth must be set")
@@ -158,6 +155,15 @@ public class Employee extends AbstractEntity{
 //    private void init() {
 //        this.age = Period.between(dateOfBirth, LocalDate.now()).getYears();
 //    }
+
+    public String getSocialSecurityNumber() {
+        return socialSecurityNumber;
+    }
+
+    public void setSocialSecurityNumber(String socialSecurityNumber) {
+        this.socialSecurityNumber = socialSecurityNumber;
+    }
+    
 
     public void setAge(int age) {
         this.age = age;
@@ -311,4 +317,35 @@ public class Employee extends AbstractEntity{
     public void setBasicSalary(BigDecimal basicSalary) {
         this.basicSalary = basicSalary;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.socialSecurityNumber.toUpperCase());
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Employee other = (Employee) obj;
+        if (!Objects.equals(this.socialSecurityNumber.toUpperCase(), other.socialSecurityNumber.toUpperCase()))
+        {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

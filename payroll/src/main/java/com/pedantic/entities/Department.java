@@ -93,6 +93,8 @@ public class Department extends AbstractEntity {
     public void setEmployeeRanks(Map<Employee, Integer> employeeRanks) {
         this.employeeRanks = employeeRanks;
     }
+    
+    
 
     //    public List<Employee> getEmployees() {
 //        return employees;
@@ -101,4 +103,33 @@ public class Department extends AbstractEntity {
 //    public void setEmployees(List<Employee> employees) {
 //        this.employees = employees;
 //    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 61 * hash + Objects.hashCode(this.departmentName);
+        return Objects.hash(getDepartmentName().toUpperCase());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Department other = (Department) obj;
+        if (!Objects.equals(this.getDepartmentName().toUpperCase(), other.getDepartmentName().toUpperCase()))
+        {
+            return false;
+        }
+        return true;
+    }
 }
