@@ -1,5 +1,6 @@
-package academy.learnprogramming.config;
+package com.pedantic.config;
 
+import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
@@ -9,7 +10,10 @@ import javax.ws.rs.core.Application;
  *
  * @author airhacks.com
  */
-@ApplicationPath("resources")
+@ApplicationPath("api/v1")// https://foo.com/resources/payroll
 public class JAXRSConfiguration extends Application {
-
+//    @Override
+//    public Set<Class<?>> getClasses(){
+//        return super.getClasses();
+//    }
 }
