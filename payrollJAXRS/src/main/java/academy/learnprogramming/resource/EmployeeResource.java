@@ -68,7 +68,7 @@ public class EmployeeResource {
 //        return employees;
     }
 
-    @GET
+    @GET    //é possivel insererir REGEX para filtrar parametros/argumentos  ex: @Path("employee/id: ^[0-9]+$")
     @Path("employees/{id: \\d+}") //api/v1/employees/employee/1  GET Method {username: }@{domain: }.{company}
     public Response getEmployeeById(@PathParam("id") @DefaultValue("0") Long id) {
 
