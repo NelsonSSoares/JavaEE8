@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
+import javax.validation.Valid;
 
 @Path("employees") //api/v1/employees/*
 @Produces("application/json")
@@ -86,7 +87,7 @@ public class EmployeeResource {
     @POST //api/v1/employees POST Request
     @Path("employees") //api/v1/employees/new - POST Request
 //    @Consumes("application/xml")
-    public Response createEmployee(Employee employee) {
+    public Response createEmployee(@Valid Employee employee) {
         persistenceService.saveEmployee(employee );
 
         URI uri = uriInfo.getAbsolutePathBuilder().path(employee.getId().toString()).build();
