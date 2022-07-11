@@ -12,7 +12,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
+import java.util.UUID;
 import javax.validation.Valid;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.Request;
 
 @Path("employees") //api/v1/employees/*
 @Produces("application/json")
@@ -71,9 +75,29 @@ public class EmployeeResource {
 
     @GET    //é possivel insererir REGEX para filtrar parametros/argumentos  ex: @Path("employee/id: ^[0-9]+$")
     @Path("employees/{id: \\d+}") //api/v1/employees/employee/1  GET Method {username: }@{domain: }.{company}
-    public Response getEmployeeById(@PathParam("id") @DefaultValue("0") Long id) {
-
-        return Response.ok(queryService.findEmployeeById(id)).status(Response.Status.OK).build();
+    public Response getEmployeeById(@PathParam("id") @DefaultValue("0") Long id, @Context Request request) {
+        
+        CacheControl cacheControl = new CacheControl();
+        cacheControl.setMaxAge(1000);
+        
+        
+        Employee employee = queryService.findEmployeeById(id);
+        EntityTag entityTag = new EntityTag(UUID.randomUUID().toString());
+        
+        Response.ResponseBuilder responseBuilder = request.evaluatePreconditions(entityTag);
+        
+        if(responseBuilder != null){
+            responseBuilder.cacheControl(cacheControl);
+            responseBuilder.build();
+           
+        }
+        
+        responseBuilder = Response.ok(employee);
+        responseBuilder.tag(entityTag);
+        responseBuilder.cacheControl(cacheControl);
+        return responseBuilder.build();
+        
+        //return Response.ok().status(Response.Status.OK).build();
     }
 
     @GET
