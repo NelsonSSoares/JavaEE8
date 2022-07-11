@@ -3,6 +3,10 @@ package academy.learnprogramming.resource;
 import academy.learnprogramming.entities.Employee;
 import academy.learnprogramming.service.PersistenceService;
 import academy.learnprogramming.service.QueryService;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import javafx.scene.media.MediaPlayer;
 
 import javax.inject.Inject;
@@ -11,18 +15,28 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.UUID;
+import java.util.logging.Logger;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Request;
 
 @Path("employees") //api/v1/employees/*
 @Produces("application/json")
 @Consumes("application/json")
-public class EmployeeResource {
 
+public class EmployeeResource {
+    
+    @Inject
+    Logger logger;
 
     @Context
     private UriInfo uriInfo;
@@ -46,7 +60,7 @@ public class EmployeeResource {
     @GET //api/v1/employees GET Request
     @Path("employees") //api/v1/employees/employees
 //    @Produces("application/xml")
-    public Response getEmployees() {
+    public Response getEmployees(@Context HttpHeaders httpHeaders) {
 
 //        Collection<Employee> employees = new ArrayList<>();
 //
@@ -67,8 +81,9 @@ public class EmployeeResource {
 //
 //        employees.add(employee);
 //        employees.add(employee1);
+        MediaType mediaType = httpHeaders.getAcceptableMediaTypes().get(0);
 
-        return Response.ok(queryService.getEmployees()).status(Response.Status.OK).build();
+        return Response.ok(queryService.getEmployees(), mediaType).status(Response.Status.OK).build();
 
 //        return employees;
     }
@@ -117,4 +132,49 @@ public class EmployeeResource {
         URI uri = uriInfo.getAbsolutePathBuilder().path(employee.getId().toString()).build();
         return Response.created(uri).status(Response.Status.CREATED).build();
     }
+    
+    @POST
+    @Path("upload")
+    @Consumes({MediaType.APPLICATION_OCTET_STREAM, "image/jpeg", "image/jpg,", "image/png"})
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response uploadPicture(File picture, @QueryParam("id") @NotNull Long id ){
+        Employee employee = queryService.findEmployeeById(id);
+        
+        try(Reader reader = new FileReader(picture))
+        {
+            employee.setPicture(Files.readAllBytes(Paths.get(picture.toURI())));
+            persistenceService.saveEmployee(employee);
+            
+            int totalsize =0;
+            int count = 0;
+            final char[] buffer = new char[256];
+            
+            while((count = reader.read(buffer)) != -1){
+                totalsize += count;
+                
+            }
+            return Response.ok(totalsize).build();
+            
+        } catch (Exception e){
+            e.printStackTrace();
+            return Response.serverError().build();
+        }
+        
+    }
+    
+        @GET
+        @Path("download")
+        @Produces({MediaType.APPLICATION_OCTET_STREAM, "image/jpg", "image/jpeg", "image/png"})
+        public Response getEmploteePicture(@QueryParam("id") @NotNull Long id) throws IOException{
+            
+            NewCookie userId = new NewCookie("userId", id.toString());
+            
+            Employee employee = queryService.findEmployeeById(id);
+            
+            if(employee != null){
+                return Response.ok().entity(Files.write(Paths.get("pic.png"), employee.getPicture()).toFile()).cookie(userId).build();
+            }
+            
+            return Response.noContent().build();
+        }
 }
