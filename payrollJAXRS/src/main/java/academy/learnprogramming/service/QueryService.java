@@ -22,7 +22,8 @@ import java.util.Set;
 @Stateless
 public class QueryService {
 
-
+    @Inject
+    private SecurityUtil securityUtil;
     @Inject
     EntityManager entityManager;
 
@@ -180,5 +181,18 @@ public class QueryService {
     @SuppressWarnings("unchecked")
     public Collection<Department> getDepartmentsNativeQuery() {
         return entityManager.createNativeQuery("select * from Department", Department.class).getResultList();
+    }
+
+
+    public boolean authenticateUser(String email, String plainTextPassword) {
+
+        ApplicationUser user = entityManager.createNamedQuery(ApplicationUser.FIND_USER_BY_CREDENTIALS, ApplicationUser.class)
+                .setParameter("email", email.toLowerCase()).getResultList().get(0);
+
+        if (user != null) {
+            return securityUtil.passwordsMatch(user.getPassword(), user.getSalt(), plainTextPassword);
+        }
+        return false;
+
     }
 }
